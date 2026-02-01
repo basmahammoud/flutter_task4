@@ -22,6 +22,11 @@ class AppLocalizations {
       'app_language': 'App Language',
       'english': 'English',
       'arabic': 'Arabic',
+      'home': 'Home',
+      'opened': 'opened',
+      'items': 'items',
+      'menu': 'Menu',
+      'logout': 'Logout',
     },
     'ar': {
       'settings': 'الإعدادات',
@@ -32,6 +37,11 @@ class AppLocalizations {
       'app_language': 'لغة التطبيق',
       'english': 'الإنجليزية',
       'arabic': 'العربية',
+      'home': 'الصفحة الرئيسية',
+      'opened': 'تم الفتح',
+      'items': 'مرة',
+      'menu': 'القائمة',
+      'logout': 'تسجيل الخروج',
     },
   };
 
@@ -47,6 +57,12 @@ class AppLocalizations {
   String get appLanguage => _text('app_language');
   String get english => _text('english');
   String get arabic => _text('arabic');
+  String get home => _text('home');
+  String get opened => _text('opened');
+  String get items => _text('items');
+  String get menu => _text('menu');
+  String get logout => _text('logout');
+
 }
 class AppLocalizationsDelegate
     extends LocalizationsDelegate<AppLocalizations> {

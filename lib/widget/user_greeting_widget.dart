@@ -10,6 +10,11 @@ class UserGreetingWidget extends StatefulWidget {
 }
 
 class _UserGreetingWidgetState extends State<UserGreetingWidget> {
+  
+// didUpdateWidget is called whenever the widget configuration changes
+// while the State object is still active.
+// We use it to respond to changes in widget properties.
+// Here, we check if the username changed and print a message if it did.
   @override
   void didUpdateWidget(covariant UserGreetingWidget oldWidget) {
     super.didUpdateWidget(oldWidget);

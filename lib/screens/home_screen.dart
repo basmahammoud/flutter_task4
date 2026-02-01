@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_task4/localization/app_localizations.dart';
 import 'package:flutter_task4/providers/session_provider.dart';
 import 'package:flutter_task4/providers/usage_provider.dart';
 import 'package:flutter_task4/widget/drawer_navigation_item.dart';
@@ -13,6 +14,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+// initState is called once when the State object is first created.
+// We use it to do initial setup or initialize values.
+// Here, we increment the usage count after the widget is rendered using addPostFrameCallback.
   @override
   void initState() {
     super.initState();
@@ -21,7 +25,9 @@ class _HomeScreenState extends State<HomeScreen> {
       usageProvider.incrementUsage();
     });
   }
-
+// dispose is called when the widget is removed from the widget tree.
+// We use it to clean up resources or stop any listeners.
+// Here, we just print a message for debugging purposes.
   @override
   void dispose() {
     debugPrint('HomeScreen closed');
@@ -31,9 +37,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final sessionProvider = Provider.of<SessionProvider>(context);
+    final t = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Home'), centerTitle: true),
+      appBar: AppBar(title: Text(t.home), centerTitle: true),
       drawer: const HomeDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -51,7 +58,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 padding: const EdgeInsets.all(24),
                 child: Column(
                   children: [
-                    const Icon(Icons.home, size: 48, color: Colors.blue),
+                    Icon(
+                      Icons.home,
+                      size: 48,
+                      color: Theme.of(context).iconTheme.color,
+                    ),
                     const SizedBox(height: 12),
 
                     UserGreetingWidget(username: sessionProvider.username),
@@ -66,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Consumer<UsageProvider>(
               builder: (context, usageProvider, child) {
                 return Card(
-                  color: Colors.blue.shade50,
+                  color: Theme.of(context).colorScheme.primary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(16),
                   ),
@@ -75,10 +86,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.bar_chart, color: Colors.blue),
+                        Icon(
+                          Icons.bar_chart,
+                          color: Theme.of(context).iconTheme.color,
+                        ),
                         const SizedBox(width: 10),
                         Text(
-                          'Opened: ${usageProvider.usageCount} times',
+                          '${t.opened}: ${usageProvider.usageCount} ${t.items}',
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,
@@ -90,30 +104,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
               },
             ),
-
-            const SizedBox(height: 32),
-
-            // Logout Button
-            // ElevatedButton.icon(
-            //   icon: const Icon(Icons.logout),
-            //   label: const Text(
-            //     'Logout',
-            //     style: TextStyle(fontSize: 18),
-            //   ),
-            //   style: ElevatedButton.styleFrom(
-            //     padding: const EdgeInsets.symmetric(vertical: 14),
-            //     backgroundColor: Colors.redAccent,
-            //     shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(14),
-            //     ),
-            //   ),
-            //   onPressed: () {
-            //     Navigator.pushReplacement(
-            //       context,
-            //       MaterialPageRoute(builder: (_) => const LoginScreen()),
-            //     );
-            //   },
-            // ),
           ],
         ),
       ),

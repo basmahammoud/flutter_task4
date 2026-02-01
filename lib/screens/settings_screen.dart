@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_task4/localization/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_task4/providers/theme_provider.dart';
 import 'package:flutter_task4/providers/language_provider.dart';
@@ -10,24 +11,19 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeProvider = Provider.of<ThemeProvider>(context);
     final languageProvider = Provider.of<LanguageProvider>(context);
+    final t = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Settings'),
-        centerTitle: true,
-      ),
+      appBar: AppBar(title: Text(t.settings), centerTitle: true),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ===== Appearance Section =====
-            const Text(
-              'Appearance',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+            //  Appearance Section 
+             Text(
+              (t.appearance),
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
 
@@ -36,8 +32,8 @@ class SettingsScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(14),
               ),
               child: SwitchListTile(
-                title: const Text('Dark Mode'),
-                subtitle: const Text('Enable dark theme'),
+                title:  Text(t.darkMode),
+                subtitle:  Text(t.enableDarkTheme),
                 value: themeProvider.isDarkMode,
                 onChanged: (value) {
                   themeProvider.toggleTheme(value);
@@ -47,47 +43,40 @@ class SettingsScreen extends StatelessWidget {
 
             const SizedBox(height: 24),
 
-            // ===== Language Section =====
-            const Text(
-              'Language',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+            // Language Section 
+             Text(
+              t.language,
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 12),
 
-           Card(
-  shape: RoundedRectangleBorder(
-    borderRadius: BorderRadius.circular(14),
-  ),
-  child: ListTile(
-    title: const Text('App Language'),
-    subtitle: Text(
-      languageProvider.currentLanguage == 'en' ? 'English' : 'Arabic',
-    ),
-    trailing: DropdownButton<String>(
-      value: languageProvider.currentLanguage, 
-      underline: const SizedBox(),
-      items: const [
-        DropdownMenuItem(
-          value: 'en',
-          child: Text('English'),
-        ),
-        DropdownMenuItem(
-          value: 'ar',
-          child: Text('Arabic'),
-        ),
-      ],
-      onChanged: (value) {
-        if (value != null) {
-          languageProvider.changeLanguage(value);
-        }
-      },
-    ),
-  ),
-),
-
+            Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+              ),
+              child: ListTile(
+                title:  Text(t.appLanguage),
+                subtitle: Text(
+                  languageProvider.currentLanguage == 'en'
+                      ? t.english
+                      : t.arabic,
+                ),
+                trailing: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: languageProvider.currentLanguage,
+                    items: [
+                      DropdownMenuItem(value: 'en', child: Text(t.english)),
+                      DropdownMenuItem(value: 'ar', child: Text(t.arabic)),
+                    ],
+                    onChanged: (value) {
+                      if (value != null) {
+                        languageProvider.changeLanguage(value);
+                      }
+                    },
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_task4/core/theme/theme.dart';
+import 'package:flutter_task4/localization/app_localizations.dart';
 import 'package:flutter_task4/providers/language_provider.dart';
 import 'package:flutter_task4/providers/session_provider.dart';
-import 'package:flutter_task4/providers/settings_provider.dart';
 import 'package:flutter_task4/providers/theme_provider.dart';
 import 'package:flutter_task4/providers/usage_provider.dart';
 import 'package:flutter_task4/screens/home_screen.dart';
@@ -9,26 +10,19 @@ import 'package:flutter_task4/screens/login_screen.dart';
 import 'package:flutter_task4/screens/settings_screen.dart';
 import 'package:flutter_task4/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => SettingsProvider()..loadSettings(),
-        ),
         ChangeNotifierProvider(create: (_) => SessionProvider()..loadSession()),
         ChangeNotifierProvider(
           create: (_) => UsageProvider()..loadUsageCount(),
@@ -38,19 +32,30 @@ class _MyAppState extends State<MyApp> {
           create: (_) => LanguageProvider()..loadLanguage(),
         ),
       ],
-      child: Consumer3<SettingsProvider, ThemeProvider, LanguageProvider>(
-        builder: (context, settingsProvider, themeProvider, languageProvider,child) {
+      child: Consumer2<ThemeProvider, LanguageProvider>(
+        builder: (context, themeProvider, languageProvider, child) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: 'Flutter Demo',
-            theme: settingsProvider.isDarkMode
-                ? ThemeData.dark()
-                : ThemeData.light(),
-         locale: languageProvider.locale,
+
+            // THEME
+           theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+
+            // LANGUAGE
+            locale: languageProvider.locale,
+            supportedLocales: const [Locale('en'), Locale('ar')],
+            localizationsDelegates: const [
+              AppLocalizationsDelegate(), //  translations file
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+
             routes: {
-              '/': (context) => SplashScreen(),
-              '/login': (context) => LoginScreen(),
-              '/home': (context) => HomeScreen(),
+              '/': (context) => const SplashScreen(),
+              '/login': (context) => const LoginScreen(),
+              '/home': (context) => const HomeScreen(),
               '/settings': (context) => const SettingsScreen(),
             },
           );
