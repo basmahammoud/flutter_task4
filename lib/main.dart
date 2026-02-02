@@ -38,9 +38,11 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
 
             // THEME
-           theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: themeProvider.isDarkMode ? ThemeMode.dark : ThemeMode.light,
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: themeProvider.isDarkMode
+                ? ThemeMode.dark
+                : ThemeMode.light,
 
             // LANGUAGE
             locale: languageProvider.locale,

@@ -14,20 +14,26 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-// initState is called once when the State object is first created.
-// We use it to do initial setup or initialize values.
-// Here, we increment the usage count after the widget is rendered using addPostFrameCallback.
+  // initState is called once when the State object is first created.
+  // We use it to do initial setup or initialize values.
+  // Here, we increment the usage count after the widget is rendered using addPostFrameCallback.
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final usageProvider = Provider.of<UsageProvider>(context, listen: false);
+      final sessionProvider = Provider.of<SessionProvider>(
+        context,
+        listen: false,
+      );
+      sessionProvider.updateLastOpenTime();
       usageProvider.incrementUsage();
     });
   }
-// dispose is called when the widget is removed from the widget tree.
-// We use it to clean up resources or stop any listeners.
-// Here, we just print a message for debugging purposes.
+
+  // dispose is called when the widget is removed from the widget tree.
+  // We use it to clean up resources or stop any listeners.
+  // Here, we just print a message for debugging purposes.
   @override
   void dispose() {
     debugPrint('HomeScreen closed');
@@ -101,6 +107,19 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
+                );
+              },
+            ),
+
+            const SizedBox(height: 24),        
+
+            Consumer<SessionProvider>(
+              builder: (context, session, child) {
+                return Text(
+                  session.lastOpenTime != null
+                      ? 'Last Opened: ${session.lastOpenTime}'
+                      : 'Welcome! This is your first time',
+                  style: const TextStyle(fontSize: 16),
                 );
               },
             ),
