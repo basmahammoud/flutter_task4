@@ -50,8 +50,7 @@ class SessionProvider extends ChangeNotifier {
     notifyListeners();
   }
 
-
-    // ubpate last open time
+  // ubpate last open time
   Future<void> updateLastOpenTime() async {
     final prefs = await SharedPreferences.getInstance();
     _lastOpenTime = DateTime.now();

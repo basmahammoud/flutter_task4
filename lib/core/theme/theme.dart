@@ -5,7 +5,7 @@ ThemeData lightTheme = ThemeData(
   useMaterial3: false,
 
   colorScheme: const ColorScheme.light(
-    primary: Color(0xFFE3F2FD),
+    primary: Color.fromARGB(255, 146, 133, 177),
     secondary: Color(0xFF5F4B8B),
   ),
   //لون الخلفية
@@ -18,9 +18,9 @@ ThemeData lightTheme = ThemeData(
   ),
 
   cardTheme: CardThemeData(
-    color: Color(0xFF9C80E6),
+    color: Color(0xFFC6B7EC),
     elevation: 10,
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
   ),
 
   iconTheme: IconThemeData(color: const Color.fromARGB(255, 53, 53, 53)),

@@ -10,7 +10,6 @@ import 'package:flutter_task4/screens/login_screen.dart';
 import 'package:flutter_task4/screens/settings_screen.dart';
 import 'package:flutter_task4/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() {
   runApp(const MyApp());
@@ -28,12 +27,12 @@ class MyApp extends StatelessWidget {
           create: (_) => UsageProvider()..loadUsageCount(),
         ),
         ChangeNotifierProvider(create: (_) => ThemeProvider()..loadTheme()),
-        ChangeNotifierProvider(
-          create: (_) => LanguageProvider()..loadLanguage(),
-        ),
+        // ChangeNotifierProvider(
+        //   create: (_) => LanguageProvider()..loadLanguage(),
+        // ),
       ],
-      child: Consumer2<ThemeProvider, LanguageProvider>(
-        builder: (context, themeProvider, languageProvider, child) {
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
 
@@ -45,14 +44,12 @@ class MyApp extends StatelessWidget {
                 : ThemeMode.light,
 
             // LANGUAGE
-            locale: languageProvider.locale,
-            supportedLocales: const [Locale('en'), Locale('ar')],
-            localizationsDelegates: const [
-              AppLocalizationsDelegate(), //  translations file
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
+            // locale: languageProvider.locale,
+            // supportedLocales: const [Locale('en'), Locale('ar')],
+            // localizationsDelegates: const [
+            //   AppLocalizationsDelegate(), //  translations file
+          
+            // ],
 
             routes: {
               '/': (context) => const SplashScreen(),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_task4/localization/app_localizations.dart';
 import 'package:flutter_task4/providers/session_provider.dart';
 import 'package:flutter_task4/providers/usage_provider.dart';
 import 'package:flutter_task4/widget/drawer_navigation_item.dart';
@@ -43,10 +42,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final sessionProvider = Provider.of<SessionProvider>(context);
-    final t = AppLocalizations.of(context);
+    // final t = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text(t.home), centerTitle: true),
+      appBar: AppBar(title: Text("Home"), centerTitle: true),
       drawer: const HomeDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -83,10 +82,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Consumer<UsageProvider>(
               builder: (context, usageProvider, child) {
                 return Card(
-                  color: Theme.of(context).colorScheme.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
+                 
                   child: Padding(
                     padding: const EdgeInsets.all(20),
                     child: Row(
@@ -98,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          '${t.opened}: ${usageProvider.usageCount} ${t.items}',
+                          'Opened: ${usageProvider.usageCount} items',
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,

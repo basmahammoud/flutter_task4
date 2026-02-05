@@ -22,4 +22,11 @@ class UsageProvider extends ChangeNotifier {
     await prefs.setInt('usageCount', _usageCount);
     notifyListeners();
   }
+// Reset usage count
+   Future<void> resetUsage() async {
+    final prefs = await SharedPreferences.getInstance();
+    _usageCount = 0;
+    await prefs.remove('usageCount');
+    notifyListeners();
+  }
 }
