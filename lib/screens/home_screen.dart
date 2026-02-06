@@ -1,5 +1,5 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_task4/localization/app_localizations.dart';
 import 'package:flutter_task4/providers/session_provider.dart';
 import 'package:flutter_task4/providers/usage_provider.dart';
 import 'package:flutter_task4/widget/drawer_navigation_item.dart';
@@ -43,10 +43,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final sessionProvider = Provider.of<SessionProvider>(context);
-    final t = AppLocalizations.of(context);
+    // final t = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: Text(t.home), centerTitle: true),
+      appBar: AppBar(title: Text('Home'.tr()), centerTitle: true),
       drawer: const HomeDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(10),
@@ -98,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          '${t.opened}: ${usageProvider.usageCount} ${t.items}',
+                          'opened: ${usageProvider.usageCount} items'.tr(),
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,

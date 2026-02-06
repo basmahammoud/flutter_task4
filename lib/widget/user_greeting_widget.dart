@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class UserGreetingWidget extends StatefulWidget {
@@ -26,7 +27,7 @@ class _UserGreetingWidgetState extends State<UserGreetingWidget> {
   @override
   Widget build(BuildContext context) {
      return Text(
-      'Hello, ${widget.username ?? 'Guest'} ',
+      'hello, ${widget.username ?? 'Guest'} '.tr(),
       style: const TextStyle(
         fontSize: 20,
         fontWeight: FontWeight.w600,

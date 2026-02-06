@@ -16,7 +16,7 @@ class SessionProvider extends ChangeNotifier {
     _username = prefs.getString('username');
     _isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
-    // استرجاع آخر وقت فتح للتطبيق
+    // Retrieve the last time the app was opened
     final lastOpenMillis = prefs.getInt('lastOpenTime');
     if (lastOpenMillis != null) {
       _lastOpenTime = DateTime.fromMillisecondsSinceEpoch(lastOpenMillis);

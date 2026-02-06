@@ -24,6 +24,15 @@ ThemeData lightTheme = ThemeData(
   ),
 
   iconTheme: IconThemeData(color: const Color.fromARGB(255, 53, 53, 53)),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color(0xFF5F4B8B),
+      foregroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+    ),
+  ),
 );
 
 ThemeData darkTheme = ThemeData(
@@ -52,6 +61,15 @@ ThemeData darkTheme = ThemeData(
     elevation: 10,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.all(Radius.circular(25)),
+    ),
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ElevatedButton.styleFrom(
+      backgroundColor: const Color(0xFF591D59),
+      foregroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
     ),
   ),
 );

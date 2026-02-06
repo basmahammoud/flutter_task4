@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_task4/localization/app_localizations.dart';
 import 'package:flutter_task4/providers/session_provider.dart';
+import 'package:flutter_task4/providers/settings_provider.dart';
+import 'package:flutter_task4/providers/usage_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,7 +11,7 @@ class HomeDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context);
+    // final t = AppLocalizations.of(context);
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -19,14 +21,14 @@ class HomeDrawer extends StatelessWidget {
               color: Theme.of(context).colorScheme.secondary,
             ),
             child: Text(
-              (t.menu),
+              'menu'.tr(),
               style: TextStyle(color: Colors.white, fontSize: 24),
             ),
           ),
 
           ListTile(
             leading: const Icon(Icons.settings),
-            title: Text(t.settings),
+            title: Text('settings'.tr()),
             onTap: () {
               Navigator.pushNamed(context, '/settings');
             },
@@ -34,7 +36,7 @@ class HomeDrawer extends StatelessWidget {
 
           ListTile(
             leading: const Icon(Icons.logout),
-            title: Text(t.logout),
+            title: Text('logout'.tr()),
             onTap: () async {
               final prefs = await SharedPreferences.getInstance();
               await prefs.remove(
@@ -45,13 +47,11 @@ class HomeDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.refresh),
-            title: const Text('Reset App Data'),
+            title: Text('reset app data'.tr()),
             onTap: () async {
-              final sessionProvider = Provider.of<SessionProvider>(
-                context,
-                listen: false,
-              );
-              await sessionProvider.resetAppData();
+               context.read<SessionProvider>().resetAppData();
+              context.read<UsageProvider>().resetUsage();
+              context.read<SettingsProvider>().resetSettings(context);
 
               // إعادة التطبيق لصفحة Login (مسح كل الصفحات السابقة)
               Navigator.pushNamedAndRemoveUntil(

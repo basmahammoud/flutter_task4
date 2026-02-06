@@ -1,24 +1,36 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_task4/core/theme/theme.dart';
-import 'package:flutter_task4/localization/app_localizations.dart';
-import 'package:flutter_task4/providers/language_provider.dart';
 import 'package:flutter_task4/providers/session_provider.dart';
-import 'package:flutter_task4/providers/theme_provider.dart';
+import 'package:flutter_task4/providers/settings_provider.dart';
 import 'package:flutter_task4/providers/usage_provider.dart';
 import 'package:flutter_task4/screens/home_screen.dart';
 import 'package:flutter_task4/screens/login_screen.dart';
 import 'package:flutter_task4/screens/settings_screen.dart';
 import 'package:flutter_task4/screens/splash_screen.dart';
 import 'package:provider/provider.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await EasyLocalization.ensureInitialized();
+  runApp(
+    EasyLocalization(
+      supportedLocales: const [Locale('en'), Locale('ar')],
+      path: 'assets/translations',
+      fallbackLocale: const Locale('en'),
+      child: MyApp(),
+    ),
+  );
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  MyApp({super.key});
 
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -27,32 +39,25 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (_) => UsageProvider()..loadUsageCount(),
         ),
-        ChangeNotifierProvider(create: (_) => ThemeProvider()..loadTheme()),
-        ChangeNotifierProvider(
-          create: (_) => LanguageProvider()..loadLanguage(),
-        ),
+        ChangeNotifierProvider(create: (_) => SettingsProvider()..loadSettings(context)),
+
       ],
-      child: Consumer2<ThemeProvider, LanguageProvider>(
-        builder: (context, themeProvider, languageProvider, child) {
+      child: Consumer<SettingsProvider>(
+        builder: (context, settingsProvider, child) {
           return MaterialApp(
             debugShowCheckedModeBanner: false,
 
             // THEME
             theme: lightTheme,
             darkTheme: darkTheme,
-            themeMode: themeProvider.isDarkMode
+            themeMode: settingsProvider.isDarkMode
                 ? ThemeMode.dark
                 : ThemeMode.light,
 
             // LANGUAGE
-            locale: languageProvider.locale,
-            supportedLocales: const [Locale('en'), Locale('ar')],
-            localizationsDelegates: const [
-              AppLocalizationsDelegate(), //  translations file
-              GlobalMaterialLocalizations.delegate,
-              GlobalWidgetsLocalizations.delegate,
-              GlobalCupertinoLocalizations.delegate,
-            ],
+            locale: context.locale,
+            supportedLocales: context.supportedLocales,
+            localizationsDelegates: context.localizationDelegates,
 
             routes: {
               '/': (context) => const SplashScreen(),
@@ -66,3 +71,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+

@@ -1,0 +1,17 @@
+{
+  "login": "تسجيل الدخول",
+  "settings": "الإعدادات",
+  "menu": "القائمة",
+  "logout": "تسجيل الخروج",
+  "opened_items": "تم فتح: {count} عناصر",
+  "Home": "الصفحة الرئيسية",
+  "language": "اللغة",
+  "hello": "مرحبا، {}",
+  "reset app data":"إعادة تعيين بيانات التطبيق",
+  "appearance": "المظهر",
+  "dark_mode": "الوضع الداكن",
+  "enable_dark_theme": "تفعيل الوضع الداكن",
+  "app_language": "لغة التطبيق",
+  "english": "الإنجليزية",
+  "arabic": "العربية"
+}
