@@ -4,14 +4,12 @@ import 'package:flutter_task4/providers/session_provider.dart';
 import 'package:flutter_task4/providers/settings_provider.dart';
 import 'package:flutter_task4/providers/usage_provider.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // final t = AppLocalizations.of(context);
     return Drawer(
       child: ListView(
         padding: EdgeInsets.zero,
@@ -37,11 +35,8 @@ class HomeDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.logout),
             title: Text('logout'.tr()),
-            onTap: () async {
-              final prefs = await SharedPreferences.getInstance();
-              await prefs.remove(
-                'token',
-              ); // إزالة التوكن أو أي بيانات تسجيل دخول
+            onTap: () {
+              context.read<SessionProvider>().logout();
               Navigator.pushReplacementNamed(context, '/login');
             },
           ),
@@ -49,7 +44,7 @@ class HomeDrawer extends StatelessWidget {
             leading: const Icon(Icons.refresh),
             title: Text('reset app data'.tr()),
             onTap: () async {
-               context.read<SessionProvider>().resetAppData();
+              context.read<SessionProvider>().resetAppData();
               context.read<UsageProvider>().resetUsage();
               context.read<SettingsProvider>().resetSettings(context);
 

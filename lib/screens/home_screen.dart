@@ -80,8 +80,9 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 24),
 
             // Usage Counter
-            Consumer<UsageProvider>(
-              builder: (context, usageProvider, child) {
+            Selector<UsageProvider, int>(
+              selector: (context, usageProvider) => usageProvider.usageCount,
+              builder: (context, usageCount, child) {
                 return Card(
                   color: Theme.of(context).colorScheme.primary,
                   shape: RoundedRectangleBorder(
@@ -98,7 +99,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         const SizedBox(width: 10),
                         Text(
-                          'opened: ${usageProvider.usageCount} items'.tr(),
+                          'opened_items'.tr(args: [usageCount.toString()]),
                           style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w500,

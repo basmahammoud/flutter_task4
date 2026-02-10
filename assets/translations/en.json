@@ -6,7 +6,7 @@
   "Home": "Home",
   "language": "Language",
    "hello_user": "Hello, {}",
-  "opened_items": "Opened: {count} items",
+  "opened_items": "Opened: {} items",
   "appearance": "Appearance",
   "dark_mode": "Dark Mode",
   "enable_dark_theme": "Enable dark theme",
