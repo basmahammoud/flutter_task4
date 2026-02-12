@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_task4/providers/session_provider.dart';
 import 'package:flutter_task4/screens/home_screen.dart';
-import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

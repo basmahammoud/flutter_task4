@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_task4/bloc/language/language_bloc.dart';
 import 'package:flutter_task4/bloc/theme/theme_bloc.dart';
 import 'package:flutter_task4/bloc/theme/theme_state.dart';
 import 'package:flutter_task4/core/theme/theme.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => ThemeBloc()),
+        BlocProvider(create: (_) => LanguageBloc()),
     ], 
     child: BlocBuilder<ThemeBloc, ThemeState>(
       builder: (context, themeState) {
