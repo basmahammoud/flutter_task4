@@ -54,10 +54,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 final username = _usernameController.text.trim();
                 if (username.isEmpty) return;
 
-                final sessionProvider =
-                    Provider.of<SessionProvider>(context, listen: false);
+                //final sessionProvider =
+                    //Provider.of<SessionProvider>(context, listen: false);
 
-                await sessionProvider.login(username);
+                //await sessionProvider.login(username);
 
                 Navigator.pushReplacement(
                   context,

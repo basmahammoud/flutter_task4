@@ -1,10 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_task4/providers/session_provider.dart';
-import 'package:flutter_task4/providers/usage_provider.dart';
 import 'package:flutter_task4/widget/drawer_navigation_item.dart';
-import 'package:flutter_task4/widget/user_greeting_widget.dart';
-import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -14,37 +10,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // initState is called once when the State object is first created.
-  // We use it to do initial setup or initialize values.
-  // Here, we increment the usage count after the widget is rendered using addPostFrameCallback.
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final usageProvider = Provider.of<UsageProvider>(context, listen: false);
-      final sessionProvider = Provider.of<SessionProvider>(
-        context,
-        listen: false,
-      );
-      sessionProvider.updateLastOpenTime();
-      usageProvider.incrementUsage();
-    });
-  }
 
-  // dispose is called when the widget is removed from the widget tree.
-  // We use it to clean up resources or stop any listeners.
-  // Here, we just print a message for debugging purposes.
-  @override
-  void dispose() {
-    debugPrint('HomeScreen closed');
-    super.dispose();
-  }
+  // يمكنك لاحقًا إضافة أي متغيرات من Bloc هنا إذا أحببت
 
   @override
   Widget build(BuildContext context) {
-    final sessionProvider = Provider.of<SessionProvider>(context);
-    // final t = AppLocalizations.of(context);
-
     return Scaffold(
       appBar: AppBar(title: Text('Home'.tr()), centerTitle: true),
       drawer: const HomeDrawer(),
@@ -70,8 +40,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Theme.of(context).iconTheme.color,
                     ),
                     const SizedBox(height: 12),
-
-                    UserGreetingWidget(username: sessionProvider.username),
+                    // يمكنك وضع اسم المستخدم هنا بعد ربطه بالـ Bloc
+                    Text(
+                      'Welcome!',
+                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                    ),
                   ],
                 ),
               ),
@@ -79,50 +52,40 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height: 24),
 
-            // Usage Counter
-            Selector<UsageProvider, int>(
-              selector: (context, usageProvider) => usageProvider.usageCount,
-              builder: (context, usageCount, child) {
-                return Card(
-                  color: Theme.of(context).colorScheme.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.bar_chart,
-                          color: Theme.of(context).iconTheme.color,
-                        ),
-                        const SizedBox(width: 10),
-                        Text(
-                          'opened_items'.tr(args: [usageCount.toString()]),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ],
+            // Usage Counter Placeholder
+            Card(
+              color: Theme.of(context).colorScheme.primary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.bar_chart,
+                      color: Theme.of(context).iconTheme.color,
                     ),
-                  ),
-                );
-              },
+                    const SizedBox(width: 10),
+                    Text(
+                      'opened_items'.tr(args: ['0']), // مؤقتًا 0
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
 
-            const SizedBox(height: 24),        
+            const SizedBox(height: 24),
 
-            Consumer<SessionProvider>(
-              builder: (context, session, child) {
-                return Text(
-                  session.lastOpenTime != null
-                      ? 'Last Opened: ${session.lastOpenTime}'
-                      : 'Welcome! This is your first time',
-                  style: const TextStyle(fontSize: 16),
-                );
-              },
+            // Last Open Time Placeholder
+            Text(
+              'Welcome! This is your first time', // مؤقتًا نص ثابت
+              style: const TextStyle(fontSize: 16),
             ),
           ],
         ),

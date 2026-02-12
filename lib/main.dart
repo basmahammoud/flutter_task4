@@ -1,14 +1,13 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_task4/bloc/theme/theme_bloc.dart';
+import 'package:flutter_task4/bloc/theme/theme_state.dart';
 import 'package:flutter_task4/core/theme/theme.dart';
-import 'package:flutter_task4/providers/session_provider.dart';
-import 'package:flutter_task4/providers/settings_provider.dart';
-import 'package:flutter_task4/providers/usage_provider.dart';
 import 'package:flutter_task4/screens/home_screen.dart';
 import 'package:flutter_task4/screens/login_screen.dart';
 import 'package:flutter_task4/screens/settings_screen.dart';
 import 'package:flutter_task4/screens/splash_screen.dart';
-import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,36 +22,25 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatefulWidget {
+class MyApp extends StatelessWidget {
   MyApp({super.key});
 
   @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-  @override
   Widget build(BuildContext context) {
-    return MultiProvider(
+    
+    return MultiBlocProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => SessionProvider()..loadSession()),
-        ChangeNotifierProvider(
-          create: (_) => UsageProvider()..loadUsageCount(),
-        ),
-        ChangeNotifierProvider(create: (_) => SettingsProvider()..loadSettings(context)),
-
-      ],
-      child: Consumer<SettingsProvider>(
-        builder: (context, settingsProvider, child) {
-          return MaterialApp(
+        BlocProvider(create: (_) => ThemeBloc()),
+    ], 
+    child: BlocBuilder<ThemeBloc, ThemeState>(
+      builder: (context, themeState) {
+        return MaterialApp(
             debugShowCheckedModeBanner: false,
 
             // THEME
             theme: lightTheme,
             darkTheme: darkTheme,
-            themeMode: settingsProvider.isDarkMode
-                ? ThemeMode.dark
-                : ThemeMode.light,
+            themeMode: themeState.isDarkMode ? ThemeMode.dark : ThemeMode.light,
 
             // LANGUAGE
             locale: context.locale,
@@ -66,9 +54,10 @@ class _MyAppState extends State<MyApp> {
               '/settings': (context) => const SettingsScreen(),
             },
           );
-        },
-      ),
+      }
+    )
     );
+
   }
 }
 

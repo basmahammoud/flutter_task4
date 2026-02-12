@@ -1,14 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_task4/providers/settings_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_task4/bloc/theme/theme_bloc.dart';
+import 'package:flutter_task4/bloc/theme/theme_event.dart';
+import 'package:flutter_task4/bloc/theme/theme_state.dart';
+
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final settingsProvider = Provider.of<SettingsProvider>(context);
 
     return Scaffold(
       appBar: AppBar(title: Text('settings'.tr()), centerTitle: true),
@@ -20,14 +22,23 @@ class SettingsScreen extends StatelessWidget {
             // Appearance Section
             Text('appearance'.tr(), style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
             const SizedBox(height: 12),
-            Card(
+
+            BlocBuilder<ThemeBloc, ThemeState>(
+              builder: (context, themeState) {
+                return Card(
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-              child: SwitchListTile(
-                title: Text('dark_mode'.tr()),
-                subtitle: Text('enable_dark_theme'.tr()),
-                value: settingsProvider.isDarkMode,
-                onChanged: (value) => settingsProvider.toggleDarkMode(),
-              ),
+               child: SwitchListTile(
+                    title: Text('dark_mode'.tr()),
+                    subtitle: Text('enable_dark_theme'.tr()),
+                    value: themeState.isDarkMode,
+                    onChanged: (_) {
+                      context
+                          .read<ThemeBloc>()
+                          .add(const ToggleTheme());
+                    },
+                  ),
+            );
+              }
             ),
             const SizedBox(height: 24),
 
@@ -40,14 +51,14 @@ class SettingsScreen extends StatelessWidget {
                 title: Text('app_language'.tr()),
                 trailing: DropdownButtonHideUnderline(
                   child: DropdownButton<String>(
-                    value: settingsProvider.currentLanguage,
+                    //value: settingsProvider.currentLanguage,
                     items: [
                       DropdownMenuItem(value: 'en', child: Text('english'.tr())),
                       DropdownMenuItem(value: 'ar', child: Text('arabic'.tr())),
                     ],
                     onChanged: (value) {
                       if (value != null) {
-                        settingsProvider.changeLanguage(context, value);
+                        //settingsProvider.changeLanguage(context, value);
                       }
                     },
                   ),
