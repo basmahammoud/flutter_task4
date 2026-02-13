@@ -1,5 +1,9 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_task4/bloc/usage/usage_block.dart';
+import 'package:flutter_task4/bloc/usage/usage_event.dart';
+import 'package:flutter_task4/bloc/usage/usage_state.dart';
 import 'package:flutter_task4/widget/drawer_navigation_item.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,7 +14,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   // يمكنك لاحقًا إضافة أي متغيرات من Bloc هنا إذا أحببت
 
   @override
@@ -43,36 +46,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     // يمكنك وضع اسم المستخدم هنا بعد ربطه بالـ Bloc
                     Text(
                       'Welcome!',
-                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            // Usage Counter Placeholder
-            Card(
-              color: Theme.of(context).colorScheme.primary,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.bar_chart,
-                      color: Theme.of(context).iconTheme.color,
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      'opened_items'.tr(args: ['0']), // مؤقتًا 0
                       style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ],
@@ -82,9 +58,55 @@ class _HomeScreenState extends State<HomeScreen> {
 
             const SizedBox(height: 24),
 
+            // Usage Counter Placeholder
+            BlocProvider(
+              create: (_) => UsageBloc()
+                ..add(
+                  FetchUsageData(),
+                ), // send event to bring data
+              child: BlocBuilder<UsageBloc, UsageState>(
+                builder: (context, state) {
+                  if (state is UsageSuccess) {
+                    return Card(
+                      color: Theme.of(context).colorScheme.primary,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.bar_chart,
+                              color: Theme.of(context).iconTheme.color,
+                            ),
+                            const SizedBox(width: 10),
+                            Text(
+                              'opened_items'.tr(args: [state.usageData]),
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    );
+                  } else if (state is UsageLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  } else {
+                    return const SizedBox();
+                  }
+                },
+              ),
+            ),
+
+            const SizedBox(height: 24),
+
             // Last Open Time Placeholder
             Text(
-              'Welcome! This is your first time', // مؤقتًا نص ثابت
+              'Welcome! This is your first time',
               style: const TextStyle(fontSize: 16),
             ),
           ],

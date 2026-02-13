@@ -36,7 +36,7 @@ class HomeDrawer extends StatelessWidget {
             leading: const Icon(Icons.logout),
             title: Text('logout'.tr()),
             onTap: () {
-              context.read<SessionProvider>().logout();
+             // context.read<SessionProvider>().logout();
               Navigator.pushReplacementNamed(context, '/login');
             },
           ),
