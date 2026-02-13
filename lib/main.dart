@@ -6,6 +6,7 @@ import 'package:flutter_task4/bloc/login/login_bloc.dart';
 import 'package:flutter_task4/bloc/theme/theme_bloc.dart';
 import 'package:flutter_task4/bloc/theme/theme_state.dart';
 import 'package:flutter_task4/bloc/usage/usage_block.dart';
+import 'package:flutter_task4/bloc/user_name/user_bloc.dart';
 import 'package:flutter_task4/core/theme/theme.dart';
 import 'package:flutter_task4/screens/home_screen.dart';
 import 'package:flutter_task4/screens/login_screen.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (_) => LanguageBloc()),
         BlocProvider(create: (_) => LoginBloc()),
         BlocProvider(create:  (_) => UsageBloc()),
+        BlocProvider(create: (_) => UserNameBloc()),
     ], 
     child: BlocBuilder<ThemeBloc, ThemeState>(
       builder: (context, themeState) {

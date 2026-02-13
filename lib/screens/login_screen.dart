@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_task4/bloc/login/login_bloc.dart';
 import 'package:flutter_task4/bloc/login/login_event.dart';
 import 'package:flutter_task4/bloc/login/login_state.dart';
+import 'package:flutter_task4/bloc/user_name/user_bloc.dart';
+import 'package:flutter_task4/bloc/user_name/user_event.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -52,20 +54,23 @@ class _LoginScreenState extends State<LoginScreen> {
             // Login Button
             BlocBuilder<LoginBloc, LoginState>(
               builder: (context, state) {
+                if (state is LoginSuccess) {
+                  context.read<UserNameBloc>().add(
+                    FetchUserName(name: state.username),
+                  );
 
-                  if (state is LoginSuccess) {
-                    // من اجل التاكد انه تم رسم الصفحة
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        Navigator.pushReplacementNamed(context, '/home');
-                      });
-                    }
-                    if (state is LoginFailure) {
-                      WidgetsBinding.instance.addPostFrameCallback((_) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(state.errorMessage)),
-                        );
-                      });
-                    }
+                  // من اجل التاكد انه تم رسم الصفحة
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    Navigator.pushReplacementNamed(context, '/home');
+                  });
+                }
+                if (state is LoginFailure) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text(state.errorMessage)));
+                  });
+                }
                 return ElevatedButton(
                   onPressed: state is LoginLoading
                       ? null

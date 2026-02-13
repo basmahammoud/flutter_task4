@@ -14,7 +14,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
 
         await Future.delayed(const Duration(seconds: 2));
 
-        emit(const LoginSuccess());
+        emit( LoginSuccess(username: event.username));
 
       } catch (e) {
 

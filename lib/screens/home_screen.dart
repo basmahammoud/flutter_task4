@@ -4,6 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_task4/bloc/usage/usage_block.dart';
 import 'package:flutter_task4/bloc/usage/usage_event.dart';
 import 'package:flutter_task4/bloc/usage/usage_state.dart';
+import 'package:flutter_task4/bloc/user_name/user_bloc.dart';
+import 'package:flutter_task4/bloc/user_name/user_state.dart';
 import 'package:flutter_task4/widget/drawer_navigation_item.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -43,13 +45,28 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: Theme.of(context).iconTheme.color,
                     ),
                     const SizedBox(height: 12),
-                    // يمكنك وضع اسم المستخدم هنا بعد ربطه بالـ Bloc
-                    Text(
-                      'Welcome!',
-                      style: const TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
+
+                    //present the name of user if exist in bloc
+                    BlocBuilder<UserNameBloc, UserNameState>(
+                      builder: (context, state) {
+                        if (state is UserNameUpdated) {
+                          return Text(
+                            'Welcome, ${state.name}!',
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          );
+                        } else {
+                          return const Text(
+                            'Welcome!',
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          );
+                        }
+                      },
                     ),
                   ],
                 ),
@@ -60,10 +77,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
             // Usage Counter Placeholder
             BlocProvider(
-              create: (_) => UsageBloc()
-                ..add(
-                  FetchUsageData(),
-                ), // send event to bring data
+              create: (_) => UsageBloc()..add(FetchUsageData()),
+
+              // send event to bring data
               child: BlocBuilder<UsageBloc, UsageState>(
                 builder: (context, state) {
                   if (state is UsageSuccess) {

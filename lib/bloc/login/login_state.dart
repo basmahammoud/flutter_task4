@@ -19,7 +19,8 @@ class LoginLoading extends LoginState {
 
 // نجاح تسجيل الدخول
 class LoginSuccess extends LoginState {
-  const LoginSuccess();
+    final String username; 
+  const LoginSuccess({required this.username});
 }
 
 // فشل تسجيل الدخول
