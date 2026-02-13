@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_task4/bloc/login/login_bloc.dart';
+import 'package:flutter_task4/bloc/login/login_event.dart';
+import 'package:flutter_task4/bloc/login/login_state.dart';
 import 'package:flutter_task4/screens/home_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -47,31 +51,38 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 24),
 
             // Login Button
-            ElevatedButton(
-              onPressed: () async {
-                final username = _usernameController.text.trim();
-                if (username.isEmpty) return;
+            BlocBuilder<LoginBloc, LoginState>(
+              builder: (context, state) {
 
-                //final sessionProvider =
-                    //Provider.of<SessionProvider>(context, listen: false);
+                  if (state is LoginSuccess) {
+                    // من اجل التاكد انه تم رسم الصفحة
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        Navigator.pushReplacementNamed(context, '/home');
+                      });
+                    }
+                    if (state is LoginFailure) {
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text(state.errorMessage)),
+                        );
+                      });
+                    }
+                return ElevatedButton(
+                  onPressed: state is LoginLoading
+                      ? null
+                      : () {
+                          final username = _usernameController.text.trim();
+                          if (username.isEmpty) return;
 
-                //await sessionProvider.login(username);
-
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (_) => const HomeScreen()),
+                          context.read<LoginBloc>().add(
+                            LoginRequested(username: username, password: ''),
+                          );
+                        },
+                  child: state is LoginLoading
+                      ? const CircularProgressIndicator()
+                      : const Text('Login'),
                 );
               },
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(vertical: 14),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-              child: const Text(
-                'Login',
-                style: TextStyle(fontSize: 18),
-              ),
             ),
           ],
         ),
