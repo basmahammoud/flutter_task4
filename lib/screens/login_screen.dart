@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_task4/bloc/login/login_bloc.dart';
 import 'package:flutter_task4/bloc/login/login_event.dart';
 import 'package:flutter_task4/bloc/login/login_state.dart';
+import 'package:flutter_task4/bloc/session/session_bloc.dart';
+import 'package:flutter_task4/bloc/session/session_event.dart';
 import 'package:flutter_task4/bloc/user_name/user_bloc.dart';
 import 'package:flutter_task4/bloc/user_name/user_event.dart';
 
@@ -58,6 +60,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   context.read<UserNameBloc>().add(
                     FetchUserName(name: state.username),
                   );
+
+                  context.read<SessionBloc>().add(SessionLogin());
 
                   // من اجل التاكد انه تم رسم الصفحة
                   WidgetsBinding.instance.addPostFrameCallback((_) {

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_task4/screens/login_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_task4/bloc/session/session_bloc.dart';
+import 'package:flutter_task4/bloc/session/session_event.dart';
+import 'package:flutter_task4/bloc/session/session_state.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -12,25 +15,27 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
-    // تأخير لمدة 15 ثانية ثم الانتقال
-    Future.delayed(const Duration(seconds:2), () {
-      // هنا اختر الشاشة التي تريد الانتقال إليها
-      // على سبيل المثال، الذهاب إلى LoginScreen
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const LoginScreen()),
-      );
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<SessionBloc>().add(SessionCheck());
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Text(
-          'Splash Screen',
-          style: TextStyle(fontSize: 24),
+      body: BlocListener<SessionBloc, SessionState>(
+        listener: (context, state) {
+          if (state is SessionAuthenticated) {
+            Navigator.pushReplacementNamed(context, '/home');
+          } else if (state is SessionUnauthenticated) {
+            Navigator.pushReplacementNamed(context, '/login');
+          }
+        },
+        child: Center(
+          child: Text(
+            'Splash Screen',
+            style: TextStyle(fontSize: 24),
+          ),
         ),
       ),
     );

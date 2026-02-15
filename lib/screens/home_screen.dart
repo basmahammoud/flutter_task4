@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_task4/bloc/session/session_bloc.dart';
+import 'package:flutter_task4/bloc/session/session_state.dart';
 import 'package:flutter_task4/bloc/usage/usage_block.dart';
 import 'package:flutter_task4/bloc/usage/usage_event.dart';
 import 'package:flutter_task4/bloc/usage/usage_state.dart';
@@ -121,10 +123,21 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 24),
 
             // Last Open Time Placeholder
-            Text(
-              'Welcome! This is your first time',
-              style: const TextStyle(fontSize: 16),
-            ),
+           BlocBuilder<SessionBloc, SessionState>(
+            builder: (context, state) {
+              if (state is SessionAuthenticated) {
+                return Text(
+                  'Last Opened: ${state.loginTime}',
+                  style: const TextStyle(fontSize: 16),
+                );
+              } else {
+                return const Text(
+                  'Welcome! This is your first time',
+                  style: TextStyle(fontSize: 16),
+                );
+              }
+            },
+          ),
           ],
         ),
       ),

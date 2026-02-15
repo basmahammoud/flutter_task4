@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_task4/bloc/language/language_bloc.dart';
 import 'package:flutter_task4/bloc/login/login_bloc.dart';
+import 'package:flutter_task4/bloc/session/session_bloc.dart';
 import 'package:flutter_task4/bloc/theme/theme_bloc.dart';
 import 'package:flutter_task4/bloc/theme/theme_state.dart';
 import 'package:flutter_task4/bloc/usage/usage_block.dart';
@@ -31,18 +32,18 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => ThemeBloc()),
         BlocProvider(create: (_) => LanguageBloc()),
         BlocProvider(create: (_) => LoginBloc()),
-        BlocProvider(create:  (_) => UsageBloc()),
+        BlocProvider(create: (_) => UsageBloc()),
         BlocProvider(create: (_) => UserNameBloc()),
-    ], 
-    child: BlocBuilder<ThemeBloc, ThemeState>(
-      builder: (context, themeState) {
-        return MaterialApp(
+        BlocProvider(create: (_) => SessionBloc()),
+      ],
+      child: BlocBuilder<ThemeBloc, ThemeState>(
+        builder: (context, themeState) {
+          return MaterialApp(
             debugShowCheckedModeBanner: false,
 
             // THEME
@@ -62,10 +63,8 @@ class MyApp extends StatelessWidget {
               '/settings': (context) => const SettingsScreen(),
             },
           );
-      }
-    )
+        },
+      ),
     );
-
   }
 }
-
