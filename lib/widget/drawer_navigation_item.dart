@@ -1,9 +1,11 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_task4/providers/session_provider.dart';
-import 'package:flutter_task4/providers/settings_provider.dart';
-import 'package:flutter_task4/providers/usage_provider.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_task4/bloc/reset-app-data/reset_bloc.dart';
+import 'package:flutter_task4/bloc/reset-app-data/reset_event.dart';
+import 'package:flutter_task4/bloc/session/session_bloc.dart';
+import 'package:flutter_task4/bloc/session/session_event.dart';
+
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});
@@ -36,24 +38,19 @@ class HomeDrawer extends StatelessWidget {
             leading: const Icon(Icons.logout),
             title: Text('logout'.tr()),
             onTap: () {
-             // context.read<SessionProvider>().logout();
-              Navigator.pushReplacementNamed(context, '/login');
+              context.read<SessionBloc>().add(SessionLogout());
+              
+               WidgetsBinding.instance.addPostFrameCallback((_) {
+                   Navigator.pushReplacementNamed(context, '/login');
+                  });
             },
           ),
+
           ListTile(
             leading: const Icon(Icons.refresh),
             title: Text('reset app data'.tr()),
-            onTap: () async {
-              context.read<SessionProvider>().resetAppData();
-              context.read<UsageProvider>().resetUsage();
-              context.read<SettingsProvider>().resetSettings(context);
-
-              // إعادة التطبيق لصفحة Login (مسح كل الصفحات السابقة)
-              Navigator.pushNamedAndRemoveUntil(
-                context,
-                '/login',
-                (route) => false,
-              );
+            onTap: () {
+              context.read<ResetAppDataBloc>().add(const ResetRequested());
             },
           ),
         ],

@@ -1,37 +1,45 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_task4/bloc/session/session_event.dart';
-import 'package:flutter_task4/bloc/session/session_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'session_event.dart';
+import 'session_state.dart';
 
 class SessionBloc extends Bloc<SessionEvent, SessionState> {
   SessionBloc() : super(SessionInitial()) {
-    //login
+    // Login
     on<SessionLogin>((event, emit) async {
       final prefs = await SharedPreferences.getInstance();
-      prefs.setBool('isLoggedIn', true);
+      await prefs.setBool('isLoggedIn', true);
+      await prefs.setString('username', event.username);
       await prefs.setString('loginTime', DateTime.now().toIso8601String());
-      emit(
-        SessionAuthenticated(loginTime: DateTime.now(), isAuthenticated: true),
-      );
+
+      emit(SessionAuthenticated(
+        loginTime: DateTime.now(),
+        username: event.username,
+      ));
     });
 
-    //logout
+    // Logout
     on<SessionLogout>((event, emit) async {
       final prefs = await SharedPreferences.getInstance();
-      await prefs.setBool('isLoggedIn', false);
+      await prefs.remove('isLoggedIn');
+      await prefs.remove('username');
       await prefs.remove('loginTime');
-      emit(const SessionUnauthenticated());
+
+      emit(SessionUnauthenticated());
     });
-     //check session
-    on<SessionCheck>((event, emit) async{
+
+    // Check session (على Splash)
+    on<SessionCheck>((event, emit) async {
       final prefs = await SharedPreferences.getInstance();
       final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
       if (isLoggedIn) {
-        final loginTimeStr = prefs.getString('loginTime');
-        final loginTime = loginTimeStr != null ? DateTime.parse(loginTimeStr) : DateTime.now();
-        emit(SessionAuthenticated(loginTime: loginTime, isAuthenticated: true));
+        emit(SessionAuthenticated(
+          loginTime: DateTime.parse(prefs.getString('loginTime') ?? DateTime.now().toIso8601String()),
+          username: prefs.getString('username') ?? '',
+        ));
       } else {
-      emit(const SessionUnauthenticated());
+        emit(SessionUnauthenticated());
       }
     });
   }

@@ -8,8 +8,14 @@ class SessionEvent extends Equatable {
 }
 
 class SessionLogin extends SessionEvent {
-  const SessionLogin();
+  final String username;
+
+  const SessionLogin(this.username);
+
+  @override
+  List<Object?> get props => [username];
 }
+
 
 class SessionLogout extends SessionEvent {
   const SessionLogout();

@@ -1,24 +1,19 @@
 import 'package:equatable/equatable.dart';
 
 abstract class SessionState extends Equatable {
-  final bool isAuthenticated;
-  final String? username;
-
-  const SessionState({required this.isAuthenticated, this.username});
-
+  const SessionState();
   @override
-  List<Object?> get props => [isAuthenticated, username];
+  List<Object?> get props => [];
 }
 
-class SessionInitial extends SessionState {
-  const SessionInitial() : super(isAuthenticated: false);
-}
+class SessionInitial extends SessionState {}
 
 class SessionAuthenticated extends SessionState {
+  final String username;
   final DateTime loginTime;
- SessionAuthenticated({required this.loginTime, required super.isAuthenticated});
+  const SessionAuthenticated({required this.username, required this.loginTime});
+  @override
+  List<Object?> get props => [username, loginTime];
 }
 
-class SessionUnauthenticated extends SessionState {
-  const SessionUnauthenticated() : super(isAuthenticated: false);
-}
+class SessionUnauthenticated extends SessionState {}

@@ -61,8 +61,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     FetchUserName(name: state.username),
                   );
 
-                  context.read<SessionBloc>().add(SessionLogin());
-
+                   context.read<SessionBloc>().add(SessionLogin(state.username));
+                   //context.read<LoginBloc>().add( LoginRequested(username: '${state.username}'));
                   // من اجل التاكد انه تم رسم الصفحة
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     Navigator.pushReplacementNamed(context, '/home');
@@ -83,7 +83,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           if (username.isEmpty) return;
 
                           context.read<LoginBloc>().add(
-                            LoginRequested(username: username, password: ''),
+                            LoginRequested(username: username),
                           );
                         },
                   child: state is LoginLoading

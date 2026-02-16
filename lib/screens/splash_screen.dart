@@ -16,22 +16,22 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<SessionBloc>().add(SessionCheck());
+      context.read<SessionBloc>().add(const SessionCheck());
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: BlocListener<SessionBloc, SessionState>(
-        listener: (context, state) {
-          if (state is SessionAuthenticated) {
-            Navigator.pushReplacementNamed(context, '/home');
-          } else if (state is SessionUnauthenticated) {
-            Navigator.pushReplacementNamed(context, '/login');
-          }
-        },
-        child: Center(
+    return BlocListener<SessionBloc, SessionState>(
+      listener: (context, state) {
+        if (state is SessionAuthenticated) {
+          Navigator.pushReplacementNamed(context, '/home');
+        } else if (state is SessionUnauthenticated) {
+          Navigator.pushReplacementNamed(context, '/login');
+        }
+      },
+      child: const Scaffold(
+        body: Center(
           child: Text(
             'Splash Screen',
             style: TextStyle(fontSize: 24),
