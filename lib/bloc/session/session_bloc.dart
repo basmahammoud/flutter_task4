@@ -7,15 +7,20 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
   SessionBloc() : super(SessionInitial()) {
     // Login
     on<SessionLogin>((event, emit) async {
+      emit(LoginLoading());
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool('isLoggedIn', true);
       await prefs.setString('username', event.username);
       await prefs.setString('loginTime', DateTime.now().toIso8601String());
 
-      emit(SessionAuthenticated(
-        loginTime: DateTime.now(),
-        username: event.username,
-      ));
+      await Future.delayed(const Duration(seconds: 2));
+
+      emit(
+        SessionAuthenticated(
+          loginTime: DateTime.now(),
+          username: event.username,
+        ),
+      );
     });
 
     // Logout
@@ -34,12 +39,37 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
       final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
       if (isLoggedIn) {
-        emit(SessionAuthenticated(
-          loginTime: DateTime.parse(prefs.getString('loginTime') ?? DateTime.now().toIso8601String()),
-          username: prefs.getString('username') ?? '',
-        ));
+        emit(
+          SessionAuthenticated(
+            loginTime: DateTime.parse(
+              prefs.getString('loginTime') ?? DateTime.now().toIso8601String(),
+            ),
+            username: prefs.getString('username') ?? '',
+          ),
+        );
       } else {
         emit(SessionUnauthenticated());
+      }
+    });
+
+    on<SessionReset>((event, emit) async {
+      print("EVENT RECEIVED");
+
+      // emit(ResetLoading());
+
+      final prefs = await SharedPreferences.getInstance();
+
+      await prefs.remove('isLoggedIn');
+
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.clear();
+
+        emit(SessionResetSuccess());
+      } catch (e) {
+        print("ERROR: $e");
+
+        emit(SessionInitial());
       }
     });
   }

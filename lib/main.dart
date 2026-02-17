@@ -2,8 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_task4/bloc/language/language_bloc.dart';
-import 'package:flutter_task4/bloc/login/login_bloc.dart';
-import 'package:flutter_task4/bloc/reset-app-data/reset_bloc.dart';
 import 'package:flutter_task4/bloc/session/session_bloc.dart';
 import 'package:flutter_task4/bloc/session/session_event.dart';
 import 'package:flutter_task4/bloc/theme/theme_bloc.dart';
@@ -19,8 +17,8 @@ import 'package:flutter_task4/screens/splash_screen.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
-  final sessionBloc = SessionBloc();
-  sessionBloc.add(const SessionCheck());
+  // final sessionBloc = SessionBloc();
+  // sessionBloc.add(const SessionCheck());
   runApp(
     EasyLocalization(
       supportedLocales: const [Locale('en'), Locale('ar')],
@@ -40,11 +38,9 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(create: (_) => ThemeBloc()),
         BlocProvider(create: (_) => LanguageBloc()),
-        BlocProvider(create: (_) => LoginBloc()),
         BlocProvider(create: (_) => UsageBloc()),
         BlocProvider(create: (_) => UserNameBloc()),
-        BlocProvider(create: (_) => SessionBloc()),
-        BlocProvider(create: (_) => ResetAppDataBloc()),
+        BlocProvider(create: (_) => SessionBloc()..add(SessionCheck())),
       ],
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, themeState) {

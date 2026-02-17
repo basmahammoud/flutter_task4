@@ -3,8 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_task4/bloc/language/language_bloc.dart';
 import 'package:flutter_task4/bloc/language/language_event.dart';
-import 'package:flutter_task4/bloc/reset-app-data/reset_bloc.dart';
-import 'package:flutter_task4/bloc/reset-app-data/reset_state.dart';
 import 'package:flutter_task4/bloc/session/session_bloc.dart';
 import 'package:flutter_task4/bloc/session/session_state.dart';
 import 'package:flutter_task4/bloc/theme/theme_bloc.dart';
@@ -28,28 +26,24 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-  return MultiBlocListener(
-  listeners: [
-
-    BlocListener<ResetAppDataBloc, ResetState>(
-      listener: (context, state) async {
-        if (state is ResetSuccess) {
-          context.read<ThemeBloc>().add(const ResetTheme());
-          context.read<LanguageBloc>().add(const ChangeLanguage(languageCode: 'en'));
-          //context.read<SessionBloc>().add(const SessionLogout());
-          await context.setLocale(const Locale('en'));
-        }
-      },
-    ),
-    BlocListener<SessionBloc, SessionState>(
+    return BlocListener<SessionBloc, SessionState>(
       listener: (context, state) {
-        if (state is SessionUnauthenticated) {
-          Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
+        if (state is SessionResetSuccess) {
+          context.read<ThemeBloc>().add(const ResetTheme());
+          context.read<LanguageBloc>().add(
+            const ChangeLanguage(languageCode: 'en'),
+          );
+          //context.read<SessionBloc>().add(const SessionLogout());
+          context.setLocale(const Locale('en'));
+        }
+        if (state is SessionUnauthenticated || state is SessionResetSuccess) {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            '/login',
+            (route) => false,
+          );
         }
       },
-    ),
-
-  ],
       child: Scaffold(
         appBar: AppBar(title: Text('Home'.tr()), centerTitle: true),
         drawer: const HomeDrawer(),

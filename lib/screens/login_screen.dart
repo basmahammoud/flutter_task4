@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_task4/bloc/login/login_bloc.dart';
-import 'package:flutter_task4/bloc/login/login_event.dart';
-import 'package:flutter_task4/bloc/login/login_state.dart';
 import 'package:flutter_task4/bloc/session/session_bloc.dart';
 import 'package:flutter_task4/bloc/session/session_event.dart';
+import 'package:flutter_task4/bloc/session/session_state.dart';
 import 'package:flutter_task4/bloc/user_name/user_bloc.dart';
 import 'package:flutter_task4/bloc/user_name/user_event.dart';
 
@@ -54,21 +52,21 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 24),
 
             // Login Button
-            BlocBuilder<LoginBloc, LoginState>(
+            BlocBuilder<SessionBloc, SessionState>(
               builder: (context, state) {
-                if (state is LoginSuccess) {
+                if (state is SessionAuthenticated) {
                   context.read<UserNameBloc>().add(
                     FetchUserName(name: state.username),
                   );
 
-                   context.read<SessionBloc>().add(SessionLogin(state.username));
-                   //context.read<LoginBloc>().add( LoginRequested(username: '${state.username}'));
+                  context.read<SessionBloc>().add(SessionLogin(state.username));
+                  //context.read<LoginBloc>().add( LoginRequested(username: '${state.username}'));
                   // من اجل التاكد انه تم رسم الصفحة
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     Navigator.pushReplacementNamed(context, '/home');
                   });
                 }
-                if (state is LoginFailure) {
+                if (state is LoginError) {
                   WidgetsBinding.instance.addPostFrameCallback((_) {
                     ScaffoldMessenger.of(
                       context,
@@ -82,8 +80,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           final username = _usernameController.text.trim();
                           if (username.isEmpty) return;
 
-                          context.read<LoginBloc>().add(
-                            LoginRequested(username: username),
+                          context.read<SessionBloc>().add(
+                            SessionLogin(username),
                           );
                         },
                   child: state is LoginLoading

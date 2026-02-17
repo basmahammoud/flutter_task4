@@ -1,11 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_task4/bloc/reset-app-data/reset_bloc.dart';
-import 'package:flutter_task4/bloc/reset-app-data/reset_event.dart';
 import 'package:flutter_task4/bloc/session/session_bloc.dart';
 import 'package:flutter_task4/bloc/session/session_event.dart';
-
 
 class HomeDrawer extends StatelessWidget {
   const HomeDrawer({super.key});
@@ -39,10 +36,6 @@ class HomeDrawer extends StatelessWidget {
             title: Text('logout'.tr()),
             onTap: () {
               context.read<SessionBloc>().add(SessionLogout());
-              
-               WidgetsBinding.instance.addPostFrameCallback((_) {
-                   Navigator.pushReplacementNamed(context, '/login');
-                  });
             },
           ),
 
@@ -50,7 +43,8 @@ class HomeDrawer extends StatelessWidget {
             leading: const Icon(Icons.refresh),
             title: Text('reset app data'.tr()),
             onTap: () {
-              context.read<ResetAppDataBloc>().add(const ResetRequested());
+              context.read<SessionBloc>().add(const SessionReset());
+              Navigator.pushReplacementNamed(context, '/login');
             },
           ),
         ],
