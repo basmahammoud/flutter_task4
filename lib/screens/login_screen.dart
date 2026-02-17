@@ -52,27 +52,27 @@ class _LoginScreenState extends State<LoginScreen> {
             const SizedBox(height: 24),
 
             // Login Button
-            BlocBuilder<SessionBloc, SessionState>(
-              builder: (context, state) {
+            BlocListener<SessionBloc, SessionState>(
+              listener: (context, state) {
                 if (state is SessionAuthenticated) {
                   context.read<UserNameBloc>().add(
                     FetchUserName(name: state.username),
                   );
 
-                  context.read<SessionBloc>().add(SessionLogin(state.username));
-                  //context.read<LoginBloc>().add( LoginRequested(username: '${state.username}'));
-                  // من اجل التاكد انه تم رسم الصفحة
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    Navigator.pushReplacementNamed(context, '/home');
-                  });
+                  Navigator.pushReplacementNamed(context, '/home');
                 }
+
                 if (state is LoginError) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text(state.errorMessage)));
-                  });
+                  ScaffoldMessenger.of(
+                    context,
+                  ).showSnackBar(SnackBar(content: Text(state.errorMessage)));
                 }
+              },
+              child: const SizedBox(),
+            ),
+
+            BlocBuilder<SessionBloc, SessionState>(
+              builder: (context, state) {
                 return ElevatedButton(
                   onPressed: state is LoginLoading
                       ? null
@@ -84,6 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             SessionLogin(username),
                           );
                         },
+
                   child: state is LoginLoading
                       ? const CircularProgressIndicator()
                       : const Text('Login'),

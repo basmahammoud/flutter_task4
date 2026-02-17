@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_task4/bloc/session/session_bloc.dart';
+import 'package:flutter_task4/bloc/session/session_event.dart';
 import 'package:flutter_task4/bloc/session/session_state.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -14,9 +15,9 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   context.read<SessionBloc>().add(const SessionCheck());
-    // });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<SessionBloc>().add(const SessionCheck());
+    });
   }
 
   @override

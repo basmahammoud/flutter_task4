@@ -34,24 +34,39 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
     });
 
     // Check session (على Splash)
-    on<SessionCheck>((event, emit) async {
-      final prefs = await SharedPreferences.getInstance();
-      final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+   on<SessionCheck>((event, emit) async {
 
-      if (isLoggedIn) {
-        emit(
-          SessionAuthenticated(
-            loginTime: DateTime.parse(
-              prefs.getString('loginTime') ?? DateTime.now().toIso8601String(),
-            ),
-            username: prefs.getString('username') ?? '',
-          ),
-        );
-      } else {
-        emit(SessionUnauthenticated());
-      }
-    });
+  print("SESSION CHECK CALLED");
 
+  final prefs = await SharedPreferences.getInstance();
+
+  print("ALL KEYS: ${prefs.getKeys()}");
+  print("USERNAME: ${prefs.getString('username')}");
+  print("IS LOGGED IN: ${prefs.getBool('isLoggedIn')}");
+
+  final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+
+  if (isLoggedIn) {
+
+    emit(
+      SessionAuthenticated(
+        loginTime: DateTime.parse(
+          prefs.getString('loginTime') ??
+          DateTime.now().toIso8601String(),
+        ),
+        username: prefs.getString('username') ?? '',
+      ),
+    );
+
+  } else {
+
+    emit(SessionUnauthenticated());
+
+  }
+});
+
+
+    //reset session
     on<SessionReset>((event, emit) async {
       print("EVENT RECEIVED");
 

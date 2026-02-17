@@ -28,3 +28,7 @@ class SessionCheck extends SessionEvent {
 class SessionReset extends SessionEvent {
   const SessionReset();
 }
+
+class SessionClearState extends SessionEvent {
+  const SessionClearState();
+}

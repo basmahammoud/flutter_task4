@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_task4/bloc/language/language_bloc.dart';
 import 'package:flutter_task4/bloc/language/language_event.dart';
 import 'package:flutter_task4/bloc/session/session_bloc.dart';
+import 'package:flutter_task4/bloc/session/session_event.dart';
 import 'package:flutter_task4/bloc/session/session_state.dart';
 import 'package:flutter_task4/bloc/theme/theme_bloc.dart';
 import 'package:flutter_task4/bloc/theme/theme_event.dart';
@@ -22,28 +23,41 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // يمكنك لاحقًا إضافة أي متغيرات من Bloc هنا إذا أحببت
 
   @override
   Widget build(BuildContext context) {
     return BlocListener<SessionBloc, SessionState>(
-      listener: (context, state) {
-        if (state is SessionResetSuccess) {
-          context.read<ThemeBloc>().add(const ResetTheme());
-          context.read<LanguageBloc>().add(
-            const ChangeLanguage(languageCode: 'en'),
-          );
-          //context.read<SessionBloc>().add(const SessionLogout());
-          context.setLocale(const Locale('en'));
-        }
-        if (state is SessionUnauthenticated || state is SessionResetSuccess) {
-          Navigator.pushNamedAndRemoveUntil(
-            context,
-            '/login',
-            (route) => false,
-          );
-        }
-      },
+  listener: (context, state) async {
+
+    if (state is SessionResetSuccess) {
+
+      context.read<ThemeBloc>().add(const ResetTheme());
+
+      context.read<LanguageBloc>().add(
+        const ChangeLanguage(languageCode: 'en'),
+      );
+
+      await context.setLocale(const Locale('en'));
+
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/login',
+        (route) => false,
+      );
+
+      /// clear session state to avoid any data remain after reset
+      context.read<SessionBloc>().add(const SessionClearState());
+    }
+
+    if (state is SessionUnauthenticated) {
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/login',
+        (route) => false,
+      );
+    }
+    
+  },
       child: Scaffold(
         appBar: AppBar(title: Text('Home'.tr()), centerTitle: true),
         drawer: const HomeDrawer(),

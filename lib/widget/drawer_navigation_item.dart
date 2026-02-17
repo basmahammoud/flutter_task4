@@ -44,7 +44,6 @@ class HomeDrawer extends StatelessWidget {
             title: Text('reset app data'.tr()),
             onTap: () {
               context.read<SessionBloc>().add(const SessionReset());
-              Navigator.pushReplacementNamed(context, '/login');
             },
           ),
         ],
