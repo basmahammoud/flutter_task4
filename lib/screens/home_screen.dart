@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
       );
 
       /// clear session state to avoid any data remain after reset
-      context.read<SessionBloc>().add(const SessionClearState());
+      context.read<SessionBloc>().add(const SessionClear());
     }
 
     if (state is SessionUnauthenticated) {

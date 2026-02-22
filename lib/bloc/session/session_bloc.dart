@@ -87,5 +87,10 @@ class SessionBloc extends Bloc<SessionEvent, SessionState> {
         emit(SessionInitial());
       }
     });
+
+      on<SessionClear>((event, emit) async {
+    emit(SessionInitial());
+  });
   }
+
 }
